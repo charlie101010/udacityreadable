@@ -4,6 +4,7 @@ import CommentsNew from './comments_new'
 import {getPost, getComments, incrementPostVote, incrementCommentVote, deletePost, deleteComment} from '../actions';
 import {Link} from 'react-router-dom';
 import _ from 'lodash';
+import NotFound from '../containers/not_found';
 
 
 
@@ -78,7 +79,7 @@ class PostShow extends Component{
 	render(){
 		console.log("comments", this.props.comments);
 		if(!this.props.post){
-			return <div> Loading </div>;
+			return <NotFound />;
 		}
 
 		return(

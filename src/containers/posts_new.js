@@ -11,6 +11,8 @@ class PostsNew extends Component{
 
 	componentDidMount(){
 		this.props.getCategories();
+		console.log(this.props.categories);
+
 		
 	}
 
@@ -79,12 +81,17 @@ onSubmit(values){
 
 				/>
 
-				<Field 
-				label="Category"
-				name="category"
-				component={this.renderField} 
+				<div>
+		          <Field name="category" component="select">
+		          {this.props.categories.map(category=>(
+		          
+		          	
+		            <option value={category.name}>{category.name}</option>
 
-				/>
+		         	))}
+		          </Field>
+		        </div>
+						
 
 		
 
