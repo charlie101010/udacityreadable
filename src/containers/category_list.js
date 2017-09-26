@@ -64,4 +64,4 @@ const mapStateToProps = (state) =>{
 	return {categories: state.categories, activeCategory: state.active, activePost: state.setActivePost};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoryList);
+export default connect(mapStateToProps, {getCategories, setActiveCategory})(CategoryList);
