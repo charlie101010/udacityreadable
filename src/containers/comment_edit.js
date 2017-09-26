@@ -11,7 +11,6 @@ class CommentsEdit extends Component{
 
 	componentDidMount(){
 		this.props.getComment(this.props.match.params.id);
-		console.log("mad initial", this.props.initialValues)
 		
 		
 		

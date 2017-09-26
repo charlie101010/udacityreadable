@@ -10,19 +10,25 @@ class CategoryList extends Component{
 
 
 	componentDidMount(){
-		this.props.getCats();
+		this.props.getCategories();
 	}
 
 	handleClick(category){
-		console.log(category);
-		this.props.setAct(category);
+		if(category == null){
+			this.props.setActiveCategory(category);
+			this.props.history.push('/');
+			
+		}
+		else{
+			this.props.setActiveCategory(category);
+		}
 
 	}
 
 	 renderList(){
 		return this.props.categories.map((category)=>{	
 			return(
-				<li key={category.name} onClick={()=>this.handleClick(category)} className="list-group-item">{category.name}</li>
+				<Link to={`/${category.name}`} key={category.name}><li onClick={()=>this.handleClick(category)} className="list-group-item">{category.name}</li></Link>
 			)
 		})
 	}
@@ -49,16 +55,6 @@ class CategoryList extends Component{
 }
 
 
-
-
-
-const mapDispatchToProps = (dispatch) => {
-	return{
-		getCats: () => {dispatch(getCategories())},
-		setAct: (category) => {dispatch(setActiveCategory(category))},
-		setActivePost: (post) => {dispatch(setActivePost(post))}
-	}
-}
 
 const mapStateToProps = (state) =>{
 	return {categories: state.categories, activeCategory: state.active, activePost: state.setActivePost};

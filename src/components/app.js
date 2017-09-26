@@ -27,10 +27,16 @@ export default class App extends Component {
      <Route exact path='/posts/:id' render={(props) => (
       <PostShow {...props}/>
     )}/>
-    <Route exact path='/' render={() => (
+     <Route path='/:category' render={(props) => (
+    <div>
+      <CategoryList {...props} />
+      <Posts {...props}/>
+      </div>
+    )}/>
+    <Route exact path='/' render={(props) => (
     	<div>
-    		<CategoryList />
-    		<Posts />
+    		<CategoryList {...props}/>
+    		<Posts {...props}/>
       	</div>
       )}/>
      </Switch>

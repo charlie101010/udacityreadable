@@ -9,11 +9,6 @@ class CommentsNew extends Component{
 
 
 
-	componentDidMount(){
-		console.log("nice props", this.props)
-	}
-
-
 	renderField(field){
 
 		const className= `form-group ${field.meta.touched && field.meta.error ? 'has-danger' : ''}`
