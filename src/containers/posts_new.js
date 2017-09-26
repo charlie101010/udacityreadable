@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import {Link, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import { createPost, getCategories} from '../actions/index';
+import * as actions from '../actions/index';
 import uuid from 'uuid';
 
 class PostsNew extends Component{
@@ -12,7 +12,6 @@ class PostsNew extends Component{
 	componentDidMount(){
 		this.props.getCategories();
 		console.log(this.props.categories);
-
 		
 	}
 
@@ -48,7 +47,7 @@ class PostsNew extends Component{
 	}
 
 onSubmit(values){
-	
+	console.log(values);
 	this.props.createPost({...values, id: uuid(), timestamp: Date.now()}, ()=>{
 		this.props.history.push('/')});
 }
@@ -81,20 +80,20 @@ onSubmit(values){
 
 				/>
 
-				<div>
-		          <Field name="category" component="select">
-		          {this.props.categories.map(category=>(
-		          
-		          	
-		            <option value={category.name}>{category.name}</option>
+			
 
-		         	))}
-		          </Field>
-		        </div>
-						
+				 <label>Category</label>
+			        <div>
+			          <Field name="category" type="text" component="select">
+			            {this.props.categories.map(category=>(
+			            <option key={category.name} value={category.name}>{category.name}</option>
+			            	)
+			            )}
+			          </Field>
+			        </div>
 
 		
-
+			
 				<Field 
 				label="UUID"
 				name="uuid"
@@ -147,5 +146,5 @@ export default reduxForm({
 	validate,
 	form: 'PostsNewForm'
 })(
-connect(mapStateToProps, {createPost, getCategories})(PostsNew)
+connect(mapStateToProps, actions)(PostsNew)
 );
