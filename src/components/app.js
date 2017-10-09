@@ -9,6 +9,7 @@ import CommentsEdit from '../containers/comment_edit';
 
 
 
+
 export default class App extends Component {
 
   render() {
@@ -24,7 +25,7 @@ export default class App extends Component {
      <Route path='/comments/:id/edit' render={(props) => (
       <CommentsEdit {...props}/>
     )}/>
-     <Route exact path='/posts/:id' render={(props) => (
+     <Route exact path='/:category/:post_id' render={(props) => (
       <PostShow {...props}/>
     )}/>
      <Route path='/:category' render={(props) => (

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {getPosts, setActivePost} from '../actions/index';
-import {bindActionCreators} from 'redux';
+import {getPosts, setActivePost, deletePost, incrementPostVote} from '../actions/index';
 import {Link} from 'react-router-dom';
 import _ from 'lodash';
 
@@ -20,6 +19,15 @@ class Posts extends Component{
 
 	sortList(){
 		$('ul#sort').append($('ul#sort').find('li').get().reverse());
+	}
+
+	onDeleteClick(id){
+		this.props.deletePost(id, ()=>{this.props.history.push('/')});
+
+	}
+
+	handlePostVote(id, voteType){
+		this.props.incrementPostVote(id, voteType)
 	}
 
 
@@ -48,9 +56,23 @@ class Posts extends Component{
 						return(
 							<div key={post.id} className="post_summary">
 								<li  className="list-group-item">
-									<Link to={`/posts/${post.id}`}>{post.body}</Link>
+										<button className="btn btn-danger pull-xs-right" onClick = {()=>this.onDeleteClick(post.id)}>
+										Delete Post
+										</button>
+										<Link to={`/posts/${post.id}/edit`}>
+										<button className="btn btn-primary pull-xs-right">
+										Edit Post
+										</button>
+										</Link>
+									<Link to={`/${post.category}/${post.id}`}>{post.body}</Link>
 									<h5>Vote Score</h5>
 									<p>{post.voteScore}</p>
+									<div>
+										<button onClick={()=>this.handlePostVote(post.id, 'upVote')} className='btn btn-primary'>UpVote</button>
+										<button onClick={()=>this.handlePostVote(post.id, 'downVote')} className='btn btn-default'>DownVote</button>
+									</div>
+									<h5>Author</h5>
+									<p>{post.author}</p>
 								</li>
 							</div>
 							  )				
@@ -73,9 +95,23 @@ class Posts extends Component{
 				{sortedPosts.filter(post=>post.category == this.props.activeCategory.path).map(post=>{
 					return(
 						<li key={post.id} className="list-group-item">
-								<Link to={`/posts/${post.id}`}>{post.body}</Link>
-								<h5>Vote Score</h5>
-								<p>{post.voteScore}</p>
+								<button className="btn btn-danger pull-xs-right" onClick = {()=>this.onDeleteClick(post.id)}>
+										Delete Post
+										</button>
+										<Link to={`/posts/${post.id}/edit`}>
+										<button className="btn btn-primary pull-xs-right">
+										Edit Post
+										</button>
+										</Link>
+									<Link to={`/${post.category}/${post.id}`}>{post.body}</Link>
+									<h5>Vote Score</h5>
+									<p>{post.voteScore}</p>
+									<div>
+										<button onClick={()=>this.handlePostVote(post.id, 'upVote')} className='btn btn-primary'>UpVote</button>
+										<button onClick={()=>this.handlePostVote(post.id, 'downVote')} className='btn btn-default'>DownVote</button>
+									</div>
+									<h5>Author</h5>
+									<p>{post.author}</p>
 							</li>
 						  )
 
@@ -92,16 +128,8 @@ class Posts extends Component{
 			)}
 }
 
-const mapDispatchToProps = (dispatch) => {
-	return{
-		getPosts: () => {dispatch(getPosts())},
-		setPost: (post) => {dispatch(setActivePost(post))}
-		
-	}
-}
-
 const mapStateToProps = (state) =>{
 	return {posts: state.posts, activeCategory: state.setActiveCategory};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Posts);
+export default connect(mapStateToProps, {getPosts, setActivePost, deletePost, incrementPostVote})(Posts);

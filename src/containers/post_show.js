@@ -5,18 +5,20 @@ import {getPost, getComments, incrementPostVote, incrementCommentVote, deletePos
 import {Link} from 'react-router-dom';
 import _ from 'lodash';
 import NotFound from '../containers/not_found';
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 
 
 class PostShow extends Component{
 	componentDidMount(){
-		this.props.getPost(this.props.match.params.id);
-		this.props.getComments(this.props.match.params.id);
+		console.log("post_id", this.props.match.params.post_id);
+		this.props.getPost(this.props.match.params.post_id);
+		this.props.getComments(this.props.match.params.post_id);
 	}
 
 	handlePostVote(voteType){
-		this.props.incrementPostVote(this.props.match.params.id, voteType)
+		this.props.incrementPostVote(this.props.match.params.post_id, voteType)
 	}
 
 	handleCommentVote(id, voteType){
@@ -46,10 +48,8 @@ class PostShow extends Component{
 			return(
 
 					<li  key={comment.id} className="list-group-item">
-						<button className="btn btn-danger pull-xs-right" onClick ={()=>this.onDeleteComment(comment.id)}>
-							Delete Comment
-						</button>
-						<Link to={`/comments/${comment.id}/edit`}><button className="btn btn-primary pull-xs-right">Edit Comment</button></Link>
+						<RaisedButton label="Delete Comment" primary={true} className="pull-xs-right" onClick ={()=>this.onDeleteComment(comment.id)}/>
+						<Link to={`/comments/${comment.id}/edit`}><RaisedButton label="Edit Comment" secondary={true} className="pull-xs-right"/></Link>
 							<h2>{comment.body}</h2>
 							<h6> Author </h6>
 							<p>{comment.author}</p>
@@ -71,13 +71,14 @@ class PostShow extends Component{
 
 
 	onDeleteClick(){
-		this.props.deletePost(this.props.match.params.id, ()=>{this.props.history.push('/')});
+		this.props.deletePost(this.props.match.params.post_id, ()=>{this.props.history.push('/')});
 
 	}
 
 	
 	render(){
 		console.log("comments", this.props.comments);
+		console.log('post', this.props.post)
 		if(!this.props.post){
 			return <NotFound />;
 		}
@@ -90,7 +91,7 @@ class PostShow extends Component{
 						<button className="btn btn-danger pull-xs-right" onClick = {this.onDeleteClick.bind(this)}>
 							Delete Post
 						</button>
-					<Link to={`/posts/${this.props.match.params.id}/edit`}>
+					<Link to={`/posts/${this.props.match.params.post_id}/edit`}>
 					<button className="btn btn-primary pull-xs-right">
 						Edit Post
 					</button>
@@ -115,7 +116,7 @@ class PostShow extends Component{
 				<div>
 					<h2>Comments ({Object.keys(this.props.comments).length})</h2>
 					<h3> New Comment </h3>
-					<CommentsNew postId={this.props.match.params.id}/>
+					<CommentsNew postId={this.props.match.params.post_id}/>
 					<button className="btn-primary btn" onClick={()=>this.sortList()}> Sort by Vote Score </button>
 					<ul id="sort">
 						{this.renderComments()}
@@ -129,7 +130,7 @@ class PostShow extends Component{
 }
 
 function mapStateToProps(state, ownProps){
-	return {post: state.posts[ownProps.match.params.id], comments: state.comments};
+	return {post: state.posts[ownProps.match.params.post_id], comments: state.comments};
 }
 
 export default connect(mapStateToProps, {getPost, getComments, incrementPostVote, incrementCommentVote, deletePost, deleteComment})(PostShow);
